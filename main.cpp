@@ -13,7 +13,8 @@ int main(){
 	bool result = false;
 	while(!result){
 		if(nm%2 == 0){
-			pair<int,int> temp = p1.move(p1.b1);
+			//pair<int,int> temp = p1.move(p1.b1);
+			pair<int,int> temp = p1.move();
 			p1.b1[temp.first][temp.second] = "X";
 			p1.printBoard();
 			int won = p1.checkWin(p1Moves,temp);
@@ -27,7 +28,8 @@ int main(){
 				cout << "Player 1 won the game." << endl;
 		}
 		else{
-			pair<int,int> temp = p1.move(p1.b1);
+			//pair<int,int> temp = p1.move(p1.b1);
+			pair<int,int> temp = p1.move();
 			p1.b1[temp.first][temp.second] = "O";
 			p1.printBoard();
 			int won = p1.checkWin(p2Moves,temp);

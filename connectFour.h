@@ -26,8 +26,10 @@ class Player{
 		int checkWin(vector<pair<int,int>>, pair<int,int>);
 		//int deepEnough(int);
 		//void move(int,int);
-		pair<int,int> move(string board[6][7]);
-		vector<pair<int,int>> getValidMove(string [6][7]);
+		//pair<int,int> move(string board[6][7]);
+		pair<int,int> move();
+		//vector<pair<int,int>> getValidMove(string [6][7]);
+		vector<pair<int,int>> getValidMove();
 		/*int opp(int);
 		bool isValidMove(int,int);
 		void aiTMove(int,int,int [],int []);
