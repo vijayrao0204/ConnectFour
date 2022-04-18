@@ -90,14 +90,8 @@ int Player::checkWin(vector<pair<int,int>> player1, pair<int,int> m){
 		return 0;
 }
 
-vector<pair<int,int>> Player::getValidMove(string board[6][7], int numMoves){
+vector<pair<int,int>> Player::getValidMove(string board[6][7]){
 	vector<pair<int,int>> validMoves;
-	if(numMoves == 0){
-		for(int i=0;i<7;i++){
-			validMoves.push_back({0,i});
-		}
-	}
-	else{
 		for(int i=0;i<5;i++){
 			for(int j=0;j<6;j++){
 				if(board[0][j] == " "){
@@ -109,12 +103,13 @@ vector<pair<int,int>> Player::getValidMove(string board[6][7], int numMoves){
 				}
 			}
 		}
-	}
 	return validMoves;
 }
 
-pair<int,int> Player::move(string board[6][7], int numMoves){
-	vector<pair<int,int>> validMoves = getValidMove(board, numMoves);
+pair<int,int> Player::move(string board[6][7]){
+	vector<pair<int,int>> validMoves = getValidMove(board);
 	cout << validMoves[0].first << "," << validMoves[0].second << "**" << endl;
 	return validMoves[0];
 }
+
+
