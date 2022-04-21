@@ -51,7 +51,6 @@ int Player::checkWin(vector<pair<int,int>> player1, pair<int,int> m){
 		for(int j=0;j<player1.size(); j++){
 			//cheching row
 			if(m.first == player1[j].first){
-				cout << "in checking row" << endl;
 				if((m.second)+i+1 == player1[j].second){
 					cr++;
 				} 
@@ -61,64 +60,44 @@ int Player::checkWin(vector<pair<int,int>> player1, pair<int,int> m){
 			}
 			//cheching column
 			if(m.second == player1[j].second){
-				cout << "in checking column" << endl;
 				if(((m.first)+i+1 == player1[j].first)){
-					cout << "m.first: " << m.first+i+1 << " player1[j].first: " <<player1[j].first <<endl;
-					cout << "m.second: " << m.second << " player1[j].second: " <<player1[j].second <<endl;
 					cc++;
 				} 
 				if(((m.first)-i-1 == player1[j].first)){
-					cout << "m.first: " << m.first-i-1 << " player1[j].first: " <<player1[j].first <<endl;
-					cout << "m.second: " << m.second << " player1[j].second: " <<player1[j].second <<endl;
 					cc++;
 				}
 			}
 			//check Diagnol
 			else{
-				cout << "in checking diagnol" << endl;
 				if(player1[j].first == ((m.first)+i+1) && player1[j].second == ((m.second)+i+1)){
-					cout << "m.first: " << m.first+i+1 << " player1[j].first: " <<player1[j].first <<endl;
-					cout << "m.second: " << m.second+i+1 << " player1[j].second: " <<player1[j].second <<endl;
 					cdr++;
 				}
 				if(player1[j].first == ((m.first)-i-1) && player1[j].second == ((m.second)-i-1)){
-					cout << "m.first: " << m.first-i-1 << " player1[i].first: " <<player1[j].first <<endl;
-					cout << "m.second: " << m.second-i-1 << " player1[i].second: " <<player1[j].second <<endl;
 					cdr++;
 				}
 				if(player1[j].first == ((m.first)+i+1) && player1[j].second == ((m.second)-i-1)){
-					cout << "In CDL" << endl;
-					cout << "m.first: " << m.first+i+1 << " player1[i].first: " <<player1[j].first <<endl;
-					cout << "m.second: " << m.second-i-1 << " player1[i].second: " <<player1[j].second <<endl;
 					cdl++;
 				}
 				if(player1[j].first == ((m.first)-i-1) && player1[j].second == ((m.second)+i+1)){
-					cout << "In CDL" << endl;
-					cout << "m.first: " << m.first-i-1 << " player1[i].first: " <<player1[j].first <<endl;
-					cout << "m.second: " << m.second+i+1 << " player1[i].second: " <<player1[j].second <<endl;
 					cdl++;
 				}
 			}
 		}
 	}
-	cout << "cr: " << cr << " cc: " << cc << " cdl: " << cdl << " cdr: " << cdr << endl;
+	//cout << "cr: " << cr << " cc: " << cc << " cdl: " << cdl << " cdr: " << cdr << endl;
 	if(cr > 2 || cc > 2 || cdr > 2 || cdl > 2)
 		return 1;
 	else 
 		return 0;
 }
 
-//vector<pair<int,int>> Player::getValidMove(string board[6][7]){
 vector<pair<int,int>> Player::getValidMove(){
 	vector<pair<int,int>> validMoves;
 		for(int i=0;i<5;i++){
 			for(int j=0;j<7;j++){
-				//if(board[0][j] == " "){
 				if(b1[0][j] == " "){
 					validMoves.push_back({0,j});
 				}
-				//if(board[i][j] == "X" || board[i][j] == "O"){
-					//if(board[i+1][j] == " ")
 				if(b1[i][j] == "X" || b1[i][j] == "O"){
 					if(b1[i+1][j] == " ")
 						validMoves.push_back({i+1,j});
@@ -128,22 +107,17 @@ vector<pair<int,int>> Player::getValidMove(){
 	return validMoves;
 }
 
-//pair<int,int> Player::move(string board[6][7]){
 pair<int,int> Player::move(){
-	//vector<pair<int,int>> validMoves = getValidMove(board);
 	vector<pair<int,int>> validMoves = getValidMove();
 	return validMoves[0];
 }
 
 int Player::e1(int pname, pair<int,int> possibleMove){
 	int score = 0;
-	cout << "In Evaluation Func 1" << endl;
 	if(pname == 1){
-		cout << "Evaluation for Player 1" << endl;
 		//chechking row
 		for(int i=0; i<3; i++){
 			//checking forward
-			cout << "Evaluation for Player 1 In row" << endl;
 			if(possibleMove.second < 4){
 				if(b1[possibleMove.first][possibleMove.second+i+1] == "X"){
 					score += 25;
@@ -180,7 +154,6 @@ int Player::e1(int pname, pair<int,int> possibleMove){
 		//checking column
 		for(int i=0; i<3; i++){
 			//checking forward
-			cout << "Evaluation for Player 1 In column" << endl;
 			if(possibleMove.first < 3){
 				if(b1[possibleMove.first+i+1][possibleMove.second] == "X"){
 					score += 25;
@@ -196,7 +169,6 @@ int Player::e1(int pname, pair<int,int> possibleMove){
 					score += 25;
 				}
 			}
-			cout << "End of Evaluation for Player 1 In column 1" << endl;
 			//checking backward
 			if(possibleMove.first > 2){
 				if(b1[possibleMove.first-i-1][possibleMove.second] == "X"){
@@ -213,13 +185,11 @@ int Player::e1(int pname, pair<int,int> possibleMove){
 					score += 25;
 				}
 			}
-			cout << "End of Evaluation for Player 1 In column 2" << endl;
 		}
 		
 		//checking diagnol 
 		for(int i=0; i<3; i++){
 			//checking forward
-			cout << "Evaluation for Player 1 In Diagnol" << endl;
 			if(possibleMove.first > 2 && possibleMove.second < 4){
 				if(b1[possibleMove.first-i-1][possibleMove.second+i+1] == "X"){
 					score += 25;
@@ -240,27 +210,11 @@ int Player::e1(int pname, pair<int,int> possibleMove){
 					score += 25;
 				}
 			}
-			//checking backward
-			/*if(possibleMove.second > 2){
-				if(b1[possibleMove.first-i-1][possibleMove.second] == "X"){
-					score += 25;
-				}
-			}
-			else if(possibleMove.second == 2 && i!=2){
-				if(b1[possibleMove.first-i-1][possibleMove.second] == "X"){
-					score += 25;
-				}
-			}
-			else if(possibleMove.second == 1 && i<1){
-				if(b1[possibleMove.first-i-1][possibleMove.second] == "X"){
-					score += 25;
-				}
-			}*/
 		}
 	}
 	else if(pname == 2){
 		//chechking row
-		cout << "Evaluation for Player 2" << endl;
+		//cout << "Evaluation for Player 2" << endl;
 		for(int i=0; i<3; i++){
 			//checking forward
 			if(possibleMove.second < 4){
@@ -355,25 +309,8 @@ int Player::e1(int pname, pair<int,int> possibleMove){
 					score += 25;
 				}
 			}
-			//checking backward
-			/*if(possibleMove.second > 2){
-				if(b1[possibleMove.first-i-1][possibleMove.second] == "O"){
-					score += 25;
-				}
-			}
-			else if(possibleMove.second == 2 && i!=2){
-				if(b1[possibleMove.first-i-1][possibleMove.second] == "O"){
-					score += 25;
-				}
-			}
-			else if(possibleMove.second == 1 && i<1){
-				if(b1[possibleMove.first-i-1][possibleMove.second] == "O"){
-					score += 25;
-				}
-			}*/
 		}
 	}
-	cout << "Evaluation Func 1 Ended" << endl;
 	return score;
 }
 
@@ -414,9 +351,6 @@ pair<int,vector<pair<int,int>>> Player::minMaxAB(pair<int,int> position, int dep
 	if(player == 1){
 		n1++;
 		successors = getValidMove();
-		for (int i=0; i<successors.size(); i++){
-			cout << "successors[i].first: " << successors[i].first << ", successors[i].second: " << successors[i].second << endl;
-		}
 	}
 	else{
 		n2++;
@@ -425,7 +359,6 @@ pair<int,vector<pair<int,int>>> Player::minMaxAB(pair<int,int> position, int dep
 	
 	if(deepEnough(depth) || successors.size() == 0){
 		vector<pair<int,int>> path = successors;
-		cout << "Calling Compute" << endl;
 		if(player == 1)
 			return make_pair(-compute(player,eFunc,position),path);
 		else
@@ -452,15 +385,12 @@ pair<int,vector<pair<int,int>>> Player::minMaxAB(pair<int,int> position, int dep
 
 pair<int,int> Player::getMinMaxAB(int depth, int evalFunc, int player, pair<int,int> position){
 	maxDepth = depth;
-	cout<<"In getMinMaxAB"<<endl;
 	if(player == 1){
 		n1=0;
 		ne1=0;
 		pair<int,vector<pair<int,int>>> mv = minMaxAB(position,0,player,INT_MAX,INT_MIN,evalFunc);
 		tn1 += n1;
 		tne1 += ne1;
-		cout<<"In getMinMaxAB if"<<endl;
-		cout << "mv.second.back().first: " << mv.second.back().first << ", mv.second.back().second: " << mv.second.back().second << endl;
 		return mv.second.back();
 	}
 	else{
@@ -473,14 +403,92 @@ pair<int,int> Player::getMinMaxAB(int depth, int evalFunc, int player, pair<int,
 	}
 }
 
-pair<int, int> Player::alphaBetaSearch(int depth, int playerName, int alpha, int beta, int evalFunc){
-	return maxValue(depth, playerName, alpha, beta, evalFunc);
+pair<int, int> Player::alphaBetaSearch(int depth, int playerName, int alpha, int beta, int evalFunc, pair<int,int> pos){
+	return maxValue(depth, playerName, alpha, beta, evalFunc, pos);
 }
 
-pair<int, int> Player::maxValue(int depth, int playerName, int alpha, int beta, int evalFunc){
+pair<int, int> Player::maxValue(int depth, int playerName, int alpha, int beta, int evalFunc, pair<int,int> pos){
 	vector<pair<int,int>> mv;
 	if(playerName == 1){
 		n1++;
-		
+		mv = getValidMove();
 	}
+	else{
+		n2++;
+		mv = getValidMove();
+	}
+	
+	if(depth == 0 || mv.size() == 0){
+		if(playerName == 1){
+			return make_pair(-compute(playerName, evalFunc,pos),-1);
+		}
+		else{
+			return make_pair(compute(playerName, evalFunc,pos),-1);
+		}
+	}
+	
+	int v = INT_MIN;
+	pair<int,int> temp;
+	pair<int,int> val;
+	for(int i=0; i<mv.size(); i++){
+		val = minValue(depth-1, opposite(playerName), alpha, beta, evalFunc, pos);
+		v = max(v,val.first);
+		if(val.first == v){
+			temp = mv[i];
+		}
+		if(v >= beta){
+			return temp;
+		}
+		alpha = max(alpha,v);
+		if(alpha > v){
+			temp = mv[i];
+		}
+	}
+	return temp;
+}
+
+pair<int, int> Player::minValue(int depth, int playerName, int alpha, int beta, int evalFunc, pair<int,int> pos){
+	vector<pair<int,int>> mv;
+	if(playerName == 1){
+		n1++;
+		mv = getValidMove();
+	}
+	else{
+		n2++;
+		mv = getValidMove();
+	}
+	
+	if(depth == 0 || mv.size() == 0){
+		if(playerName == 1){
+			return make_pair(-compute(playerName, evalFunc, pos),-1);
+		}
+		else{
+			return make_pair(compute(playerName, evalFunc, pos),-1);
+		}
+	}
+	
+	int v = INT_MAX;
+	pair<int,int> temp;
+	pair<int,int> val;
+	for(int i=0; i<mv.size(); i++){
+		val = maxValue(depth-1, opposite(playerName), alpha, beta, evalFunc, pos);
+		v = min(v,val.first);
+		if(val.first == v){
+			temp = mv[i];
+		}
+		if(v <= alpha){
+			return make_pair(v,temp.first);
+		}
+		beta = min(beta,v);
+		if(beta < v){
+			temp = mv[i];
+		}
+	}
+	return make_pair(v, temp.first);
+}
+
+pair<int,int> Player::getAlphaBeta(int depth, int playerName, int evalFunc, pair<int,int> pos){
+	pair<int,int> mv;
+	mv = alphaBetaSearch(depth, playerName, INT_MIN, INT_MAX, evalFunc, pos);
+	return mv;	
 }

@@ -40,14 +40,15 @@ class Player {
 		int getMinMaxAB(int [],int [], int , int,int, Player);
 		pair<int,vector<pair<int,int>>>minMaxAB(int[], int[],int,int,int,int,int,int);
 		int getAlphaBeta(int[], int[],int, int, int);
-		pair<int, int> alphaBetaSearch(int[], int[], int, int, int, int, int);
-		pair<int, int> maxValue(int[], int[], int, int, int, int, int);*/
-		pair<int, int> minValue(int, int, int, int, int);
+		pair<int, int> alphaBetaSearch(int[], int[], int, int, int, int, int);*/
+		pair<int, int> maxValue(int, int, int, int, int, pair<int,int>);
+		pair<int, int> minValue(int, int, int, int, int, pair<int,int>);
 		
 		int compute(int, int, pair<int,int>);
 		pair<int,vector<pair<int,int>>> minMaxAB(pair<int,int>, int, int, int, int, int);
 		pair<int,int> getMinMaxAB(int, int, int, pair<int,int>);
-		pair<int, int> alphaBetaSearch(int, int, int, int, int);
+		pair<int, int> alphaBetaSearch(int, int, int, int, int,pair<int,int>);
+		pair<int,int> getAlphaBeta(int, int, int, pair<int,int>);
 		//int getAlphaBeta(int, int, int);
 
 		int e1(int, pair<int,int>);
