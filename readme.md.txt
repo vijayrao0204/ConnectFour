@@ -1,0 +1,3 @@
+-Open cmd in the file dirctory
+-Run command g++ *.cpp
+-run a.exe command

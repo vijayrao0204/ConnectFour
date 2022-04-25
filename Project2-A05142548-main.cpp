@@ -1,5 +1,6 @@
 #include<iostream>
-#include"connectFour.h"
+#include"Project2-A05142548-connectFour.h"
+#include<time.h>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ void procedure1(int ev1,int ev2,int d,Player p1){
 	vector<pair<int,int>> p1Moves = p1.player1Moves;
 	vector<pair<int,int>> p2Moves = p1.player2Moves;
 	if(nm == 0){
-		int frstMv = rand() % 7;
+		int frstMv = rand()%7;
 		p1.b1[0][frstMv] = "X";
 		p1Moves.push_back({0,frstMv});
 		p1.printBoard();
@@ -21,31 +22,35 @@ void procedure1(int ev1,int ev2,int d,Player p1){
 	bool result = false;
 	
 	while(!result){
+		
 		if(nm == 42){
 			result == true;
 			cout << "It's a Draw!!" << endl;
 		}
-		if(nm%2 == 0){
+		else if(nm%2 == 0){
 			pair<int,int> temp = p1.getMinMaxAB(d,ev1,1,p1Moves.back());
 			p1.b1[temp.first][temp.second] = "X";
 			p1.printBoard();
-			int won = p1.checkWin(p1Moves,temp);
+			//int won = p1.checkWin(p1Moves,temp);
+			int won = p1.checkWin("X");
 			p1Moves.push_back(temp);
 			result = p1.gameOver(won);
 			if(result == true)
 				cout << "Player 1 won the game." << endl;
 		}
 		else{
-			pair<int,int> temp = p1.getAlphaBeta(d,2,ev2, p1Moves.back());
+			pair<int,int> temp = p1.getAlphaBeta(d,2,ev2, p2Moves.back());
 			p1.b1[temp.first][temp.second] = "O";
 			p1.printBoard();
-			int won = p1.checkWin(p2Moves,temp);
+			//int won = p1.checkWin(p2Moves,temp);
+			int won = p1.checkWin("O");
 			p2Moves.push_back(temp);
 			result = p1.gameOver(won);
 			if(result == true)
 				cout << "Player 2 won the game." << endl;
 		}
 		nm++;
+		//cout << "Result: "<< result << endl;
 	}
 }
 
@@ -71,10 +76,11 @@ void procedure2(int ev1,int ev2,int d,Player p1){
 			cout << "It's a Draw!!" << endl;
 		}
 		if(nm%2 == 0){
-			pair<int,int> temp = p1.getMinMaxAB(d,ev1,1,p1Moves.back());
+			pair<int,int> temp = p1.getMinMaxAB(d,ev1,1,p2Moves.back());
 			p1.b1[temp.first][temp.second] = "X";
 			p1.printBoard();
-			int won = p1.checkWin(p1Moves,temp);
+			//int won = p1.checkWin(p1Moves,temp);
+			int won = p1.checkWin("X");
 			p1Moves.push_back(temp);
 			result = p1.gameOver(won);
 			if(result == true)
@@ -84,7 +90,8 @@ void procedure2(int ev1,int ev2,int d,Player p1){
 			pair<int,int> temp = p1.getMinMaxAB(d,ev2,1, p1Moves.back());
 			p1.b1[temp.first][temp.second] = "O";
 			p1.printBoard();
-			int won = p1.checkWin(p2Moves,temp);
+			//int won = p1.checkWin(p2Moves,temp);
+			int won = p1.checkWin("O");
 			p2Moves.push_back(temp);
 			result = p1.gameOver(won);
 			if(result == true)
@@ -119,17 +126,19 @@ void procedure3(int ev1,int ev2,int d,Player p1){
 			pair<int,int> temp = p1.getAlphaBeta(d,1,ev1,p1Moves.back());
 			p1.b1[temp.first][temp.second] = "X";
 			p1.printBoard();
-			int won = p1.checkWin(p1Moves,temp);
+			//int won = p1.checkWin(p1Moves,temp);
+			int won = p1.checkWin("X");
 			p1Moves.push_back(temp);
 			result = p1.gameOver(won);
 			if(result == true)
 				cout << "Player 1 won the game." << endl;
 		}
 		else{
-			pair<int,int> temp = p1.getAlphaBeta(d,2,ev2, p1Moves.back());
+			pair<int,int> temp = p1.getAlphaBeta(d,2,ev2, p2Moves.back());
 			p1.b1[temp.first][temp.second] = "O";
 			p1.printBoard();
-			int won = p1.checkWin(p2Moves,temp);
+			//int won = p1.checkWin(p2Moves,temp);
+			int won = p1.checkWin("O");
 			p2Moves.push_back(temp);
 			result = p1.gameOver(won);
 			if(result == true)
@@ -141,8 +150,8 @@ void procedure3(int ev1,int ev2,int d,Player p1){
 
 
 int main(){
+	srand(time(0));
 	Player p1;
-	p1.printBoard();
 	int coordinates = 0;
 	cout << "Let's Play the Game of Connect 4!" << endl;
 	cout<<" ----------------------------------------------------------------\n";

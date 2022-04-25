@@ -19,7 +19,8 @@ class Player {
 		void printBoard();
 		void resetBoard();
 		bool gameOver(int);
-		int checkWin(vector<pair<int,int>>, pair<int,int>);
+		//int checkWin(vector<pair<int,int>>, pair<int,int>);
+		int checkWin(string);
 		int deepEnough(int);
 		pair<int,int> move();
 		vector<pair<int,int>> getValidMove();
@@ -34,7 +35,7 @@ class Player {
 		pair<int,int> getAlphaBeta(int, int, int, pair<int,int>);
 		
 		int e1(int, pair<int,int>);
-		//int e2(int);
-		//int e3(int);
+		int e2(int, pair<int,int>);
+		int e3(int,pair<int,int>);
 		
 };

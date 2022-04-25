@@ -1,4 +1,4 @@
-#include "connectFour.h"
+#include "Project2-A05142548-connectFour.h"
 #include<vector>
 using namespace std;
 
@@ -42,65 +42,61 @@ bool Player::gameOver(int result){
 		return false;
 }
 
-int Player::checkWin(vector<pair<int,int>> player1, pair<int,int> m){
-	int cr=0;
-	int cdl=0;
-	int cdr=0;
-	int cc=0;
-	for(int i=0;i<3;i++){
-		for(int j=0;j<player1.size(); j++){
-			//cheching row
-			if(m.first == player1[j].first){
-				if((m.second)+i+1 == player1[j].second){
-					cr++;
-				} 
-				if((m.second)-i-1 == player1[j].second){
-					cr++;
-				}
-			}
-			//cheching column
-			if(m.second == player1[j].second){
-				if(((m.first)+i+1 == player1[j].first)){
-					cc++;
-				} 
-				if(((m.first)-i-1 == player1[j].first)){
-					cc++;
-				}
-			}
-			//check Diagnol
-			else{
-				if(player1[j].first == ((m.first)+i+1) && player1[j].second == ((m.second)+i+1)){
-					cdr++;
-				}
-				if(player1[j].first == ((m.first)-i-1) && player1[j].second == ((m.second)-i-1)){
-					cdr++;
-				}
-				if(player1[j].first == ((m.first)+i+1) && player1[j].second == ((m.second)-i-1)){
-					cdl++;
-				}
-				if(player1[j].first == ((m.first)-i-1) && player1[j].second == ((m.second)+i+1)){
-					cdl++;
-				}
+int Player::checkWin(string currentPlayer){
+	//cout << currentPlayer << endl;
+	for(int i = 0; i < 6; i++){
+		for(int j = 0; j < 4; j++) {
+			if(b1[i][j] == currentPlayer){
+				//row
+				if(b1[i][j + 1] == currentPlayer && b1[i][j + 2] == currentPlayer && b1[i][j + 3] == currentPlayer)
+					return 1;
 			}
 		}
 	}
-	//cout << "cr: " << cr << " cc: " << cc << " cdl: " << cdl << " cdr: " << cdr << endl;
-	if(cr > 2 || cc > 2 || cdr > 2 || cdl > 2)
-		return 1;
-	else 
-		return 0;
+
+	for(int i = 0; i < 3; i++){
+		for(int j = 0; j < 7; j++) {
+			if(b1[i][j] == currentPlayer){
+				//column
+				if(b1[i + 1][j] == currentPlayer && b1[i + 2][j] == currentPlayer && b1[i + 3][j] == currentPlayer)
+					return 1;
+			}
+		}
+	}
+
+	for(int i = 0; i < 3; i++){
+		for(int j = 0; j < 4; j++) {
+			if(b1[i][j] == currentPlayer){
+				//diagonal right
+				if(b1[i + 1][j + 1] == currentPlayer && b1[i + 2][j + 2] == currentPlayer && b1[i + 3][j + 3] == currentPlayer)
+					return 1;
+			}
+		}
+	}
+
+	for(int i = 0; i < 3; i++){
+		for(int j = 3; j < 7; j++) {
+			if(b1[i][j] == currentPlayer){
+				//diagonal left
+				if(b1[i + 1][j - 1] == currentPlayer && b1[i + 2][j - 2] == currentPlayer && b1[i + 3][j - 3] == currentPlayer)
+					return 1;
+			}
+		}
+	}
+
+	return 0;
 }
 
 vector<pair<int,int>> Player::getValidMove(){
 	vector<pair<int,int>> validMoves;
 		for(int i=0;i<5;i++){
 			for(int j=0;j<7;j++){
-				if(b1[0][j] == " "){
-					validMoves.push_back({0,j});
-				}
 				if(b1[i][j] == "X" || b1[i][j] == "O"){
 					if(b1[i+1][j] == " ")
 						validMoves.push_back({i+1,j});
+				}
+				if(b1[0][j] == " "){
+					validMoves.push_back({0,j});
 				}
 			}
 		}
@@ -327,15 +323,14 @@ int Player::compute(int player, int eval, pair<int,int> pos){
     {
         return e1(player,pos);
     }
-    /*else if(eval==2)
+    else if(eval==2)
     {
-        return e2(player);
+        return e2(player, pos);
     }
     else
     {
-        return e3(player);
-    }*/
-	return e1(player,pos); //remove later
+        return e3(player,pos);
+    }
 }
 
 int Player::opposite(int player){
@@ -356,6 +351,7 @@ pair<int,vector<pair<int,int>>> Player::minMaxAB(pair<int,int> position, int dep
 		n2++;
 		successors = getValidMove();
 	}
+	
 	
 	if(deepEnough(depth) || successors.size() == 0){
 		vector<pair<int,int>> path = successors;
@@ -491,4 +487,182 @@ pair<int,int> Player::getAlphaBeta(int depth, int playerName, int evalFunc, pair
 	pair<int,int> mv;
 	mv = alphaBetaSearch(depth, playerName, INT_MIN, INT_MAX, evalFunc, pos);
 	return mv;	
+}
+
+
+//Evaluation Function 2
+int Player::e2(int pname, pair<int,int> possibleMove){
+	int count = 0;
+	int score = 0;
+	string currentPlayer;
+	string nextPlayer;
+
+	if (pname == 0){
+        currentPlayer = "O";
+        nextPlayer = "X";
+	}
+	else {
+        currentPlayer = "X";
+        nextPlayer = "O";
+	}
+
+	int evalTable [6][7] = {{3, 4, 5, 7, 5, 4, 3},
+                            {4, 6, 8, 10, 8, 6, 4},
+                            {5, 8, 11, 13, 11, 8, 5},
+                            {5, 8, 11, 13, 11, 8, 5},
+                            {4, 6, 8, 10, 8, 6, 4},
+                            {3, 4, 5, 7, 5, 4, 3}};
+
+    for (int i = 0; i < 6; i++){
+        for (int j = 0; j <7; j++){
+            if (b1[i][j] == currentPlayer) score += evalTable[i][j];
+            else if (b1[i][j] == nextPlayer) score -= evalTable[i][j];
+        }
+    }
+	int utility = 0;
+	for(int i = 1; i < 4; i++){
+		//column
+		int x = possibleMove.first + i;
+		int y = possibleMove.second;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == currentPlayer) utility+=10;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == nextPlayer) utility-=10;
+		x = possibleMove.first - i;
+		y = possibleMove.second;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == currentPlayer) utility+=10;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == nextPlayer) utility-=10;
+		//row
+		x = possibleMove.first;
+		y = possibleMove.second + i;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == currentPlayer) utility+=10;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == nextPlayer) utility-=10;
+		x = possibleMove.first;
+		y = possibleMove.second - i;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == currentPlayer) utility+=10;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == nextPlayer) utility-=10;
+		//diagonal right
+		x = possibleMove.first + i;
+		y = possibleMove.second + i;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == currentPlayer) utility+=10;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == nextPlayer) utility-=10;
+		x = possibleMove.first - i;
+		y = possibleMove.second - i;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == currentPlayer) utility+=10;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == nextPlayer) utility-=10;
+		//diagonal left
+		x = possibleMove.first + i;
+		y = possibleMove.second - i;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == currentPlayer) utility+=10;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == nextPlayer) utility-=10;
+		x = possibleMove.first - i;
+		y = possibleMove.second + i;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == currentPlayer) utility+=10;
+		if(x >= 0 && x < 6 && y >= 0 && y < 7 && b1[x][y] == nextPlayer) utility-=10;	 
+	}
+	score += evalTable[possibleMove.first][possibleMove.second];
+	//cout << utility + score << endl;
+    return utility + score;
+}
+
+int Player::e3(int pname, pair<int,int> possibleMove){
+	int score = 0;
+	int i ,j;
+	int rows =6;
+	int cols = 7;
+	if(pname == 1){
+		for(i = 0;i<rows;i++){
+			for(j=0;j<cols-3;j++){
+				if(b1[possibleMove.first][possibleMove.second] == "X" && 
+					b1[possibleMove.first][possibleMove.second] == b1[possibleMove.first+i][possibleMove.second+1] &&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+i][possibleMove.second+2]&&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+i][possibleMove.second+3]){
+					score = 100;
+				}
+			}
+		}
+		
+		for(i = 0;i< rows-3;i++){
+			for(j = 0;j<cols;j++){
+				if(b1[possibleMove.first][possibleMove.second] == "X" && 
+					b1[possibleMove.first][possibleMove.second] == b1[possibleMove.first+1][possibleMove.second+j] &&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+2][possibleMove.second+j]&&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+3][possibleMove.second+j]){
+					score = 100;
+				}
+			}
+		}
+		// diagonal positive win //
+		for (i = 0; i < rows - 3; i++)
+          {
+            for (j = 0; j< cols; j++)
+              {
+                if(b1[possibleMove.first][possibleMove.second+j] == "X" && 
+					b1[possibleMove.first][possibleMove.second+j] == b1[possibleMove.first+1][possibleMove.second+j+1] &&
+				    b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+2][possibleMove.second+j+2]&&
+					b1[possibleMove.first+i][possibleMove.second+j]==b1[possibleMove.first+3][possibleMove.second+j+3]){
+					score = 100;
+				}
+            }
+        }
+		  // diagonal negetative win //
+		  for (i = rows - 3; i <rows; i++){
+            for (j = 0; j< cols - 3; j++){
+                if(b1[possibleMove.first+i][possibleMove.second+j] == "X" && 
+					b1[possibleMove.first+i][possibleMove.second+j] == b1[possibleMove.first-1][possibleMove.second+1] &&
+					b1[possibleMove.first+i][possibleMove.second+j]==b1[possibleMove.first-2][possibleMove.second+2]&&
+					b1[possibleMove.first+i][possibleMove.second+j]==b1[possibleMove.first-3][possibleMove.second+3]){
+					score = 100;
+				}
+            }
+		}
+	}
+	if(pname == 2){
+		for(i = 0;i<rows;i++){
+			for(j=0;j<cols-3;j++){
+				if(b1[possibleMove.first+i][possibleMove.second+j] == "O" && 
+					b1[possibleMove.first+i][possibleMove.second+j] == b1[possibleMove.first+i][possibleMove.second+1] &&
+					b1[possibleMove.first+i][possibleMove.second+j]==b1[possibleMove.first+i][possibleMove.second+2]&&
+					b1[possibleMove.first+i][possibleMove.second+j]==b1[possibleMove.first+i][possibleMove.second+3]){
+					score = 100;
+					}
+			}
+		}
+		
+		for(i = 0;i< rows-3;i++){
+			for(j = 0;j<cols;j++){
+				if(b1[possibleMove.first][possibleMove.second] == "O" && 
+					b1[possibleMove.first][possibleMove.second] == b1[possibleMove.first+1][possibleMove.second+j] &&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+2][possibleMove.second+j]&&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+3][possibleMove.second+j]){
+					score = 100;
+					}
+			}
+		}
+		// diagonal positive win //
+		for (i = 0; i < rows - 3; i++)
+          {
+            for (j = 0; j< cols; j++)
+              {
+                if(b1[possibleMove.first][possibleMove.second] == "O" && 
+					b1[possibleMove.first][possibleMove.second] == b1[possibleMove.first+1][possibleMove.second+1] &&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+2][possibleMove.second+2]&&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first+3][possibleMove.second+3]){
+					score = 100;
+					}
+              }
+          }
+		  // diagonal negetative win //
+		  for (i = rows - 3; i <rows; i++)
+          {
+            for (j = 0; j< cols-3; j++)
+              {
+                if(b1[possibleMove.first][possibleMove.second] == "0" && 
+					b1[possibleMove.first][possibleMove.second] == b1[possibleMove.first-1][possibleMove.second+1] &&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first-2][possibleMove.second+2]&&
+					b1[possibleMove.first][possibleMove.second]==b1[possibleMove.first-3][possibleMove.second+3]){
+					score = 100;
+					}
+              }
+          }
+	}
+	return score;
 }
